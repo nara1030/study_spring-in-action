@@ -22,7 +22,7 @@
 4. [애스펙트와 템플릿(template)을 통한 반복적인 코드 제거](#애스펙트와-템플릿을-통한-반복적인-코드-제거)
 
 #### POJO를 이용한 가볍고 비침투적인 개발
-스프링은 스프링에 특화된 인터페이스 구현이나 스프링 자체에 의존성이 높은 클래스 확장을 거의 요구하지 않는다. 스프링 기반 애플리케이션의 클래스에는 스프링이 사용한다는 표시도 거의 없다. 최악의 경우, 클래스에 스프링의 애너테이션(annotation)이 붙지만 그렇지 않은 경우에는 POJO[2]다. 즉, 스프링의 비침투적 프로그래밍[3] 모델에서, 클래스는 스프링 애플리케이션 외에도 잘 동작한다.
+스프링은 스프링에 특화된 인터페이스 구현이나 스프링 자체에 의존성이 높은 클래스 확장을 거의 요구하지 않는다. 스프링 기반 애플리케이션의 클래스에는 스프링이 사용한다는 표시도 거의 없다. 최악의 경우, 클래스에 스프링의 애너테이션(annotation)이 붙지만 그렇지 않은 경우에는 POJO`[2]다. 즉, 스프링의 비침투적 프로그래밍[3] 모델에서, 클래스는 스프링 애플리케이션 외에도 잘 동작한다.
 
 이러한 간단한 형태에도 불구하고 POJO는 매우 강력한데, 스프링이 POJO에 힘을 불어넣는 방법 중 하나가 바로 DI를 활용한 조립이다.
 
@@ -69,7 +69,7 @@ public class BraveKnight implements Knight {
 public class BraveKnightTest {
     @Test
     public void knightShouldEmbarkOnQuest() {
-        Quest mockQuest = mock(Quest.class);    // 모의 Quest 생성
+        Quest mockQuest = mock(Quest.class);    	// 모의 Quest 생성
         BraveKnight knight = new BraveKnight(mockQuest);    // 모의 Quest 주입
         knight.embarkOnQuest();
         verify(mockQuest, times(1)).embark();
@@ -111,7 +111,11 @@ public class KnightMain {
 ##### [목차로 이동](#목차)
 
 #### 애스펙트와 공통 규약을 통한 선언적 프로그래밍
+시스템은 보통 특정한 기능을 책임지는 여러 개의 컴포넌트로 구성된다. 그러나 각 컴포넌트는 대체로 본연의 특정한 기능 외에 로깅(logging)이나 트랜잭션 관리, 보안 등의 시스템 서비스도 수행해야 하는 경우가 많다. 이러한 시스템 서비스는 시스템의 여러 컴포넌트에 관련되는 경향이 있으므로 횡단 관심사(cross-cutting concerns)라고 한다. AOP는 이러한 시스템 서비스를 모듈화해서 컴포넌트에 *선언적*으로 적용한다.
 
+다시 말해 AOP를 이용하면 시스템 서비스에 대해서는 전혀 알지 못하지만, 응집도가 높고 본연의 관심사에 집중하는 컴포넌트를 만든다. 즉 애스펙트는 POJO를 단순화한다. 핵심 기능을 구현하는 모듈에는 아무런 변화도 가하지 않고 추가적인 기능을 *선언적*으로 적용하기 때문이다. 아래와 같은 로깅 시스템을 가정해보자.
+
+콛.
 
 ##### [목차로 이동](#목차)
 
@@ -121,8 +125,8 @@ public class KnightMain {
 ##### [목차로 이동](#목차)
 
 - - -
-* [1]: Expert One-on-One: J2EE Design and Development 
-* [2]: POJO(plain-old-java-object)
+* [1]: Expert One-on-One: J2EE Design and Development
+* `[2]: POJO(plain-old-java-object)
 	* [What is the difference a JavaBean and a POJO?](https://stackoverflow.com/questions/1394265/what-is-the-difference-between-a-javabean-and-a-pojo)
 * [3]
 	* 비침투적 개발이란 바탕이 되는 기술을 사용하는 클래스, 인터페이스, API 등을 코드에 직접 나타내지 않는 방법이다. 복잡함을 분리할 수 있다.
