@@ -35,9 +35,9 @@
 ### 자동으로 빈 와이어링하기
 스프링은 두 가지 방법으로 오토와이어링을 수행한다.
 
-1. 컴포넌트 스캐닝
+1. [컴포넌트 스캐닝](#발견-가능한-빈-만들기)
 	* 스프링은 애플리케이션 컨텍스트에서 생성되는 빈을 자동으로 발견
-2. 오토와이어링
+2. [오토와이어링](#오토와이어링되는-빈의-애너테이션)
 	* 스프링은 자동으로 빈 의존성을 충족
 
 컴포넌트 스캐닝과 오토와이어링을 모두 사용하면 명시적 설정을 최소한으로 유지하면서 스프링이 시작 시에 클래스를 발견, 빈으로 생성하고 주입한다.
@@ -118,8 +118,53 @@ public class CDPlayerTest {
 }
 ```
 
-따라서 config를 애플리케이션 코드와 분리해주기 위해 @ComponentScan 안에 애트리뷰트를 설정해서 베이스 패키지를 명시적으로 설정할 수 있다.
+따라서 config를 애플리케이션 코드와 분리해주기 위해 @ComponentScan 안에 애트리뷰트를 설정해서 베이스 패키지를 명시적으로 설정[1]할 수 있다. 아래와 같다.
 
+```java
+@Configuration
+@ComponentScan(basePackages = "hje.study.spring_in_action.ch02.soundsystem")
+public class CDPlayerConfig {
+}
+```
+
+이 경우 config를 분리할 수 있기 때문에 패키지 구조를 아래와 같이 구성할 수 있다.
+
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── hje
+    │   │       └── study
+    │   │           └── spring_in_action
+    │   │               └── soundsystem
+    │   │                   ├── cd
+    │   │                   │   ├── CompactDisc.java
+    │   │                   │   └── SgtPeppers.java
+    │   │                   └── config
+    │   │                       └── CDPlayerConfig.java
+    │   └── resources
+    │       └── application.properties
+    └── test
+        └── java
+            └── hje
+                └── study
+                    └── spring_in_action
+                        └── soundsystem
+                            └── CDPlayerTest.java
+```
+
+- - -
+* [1]
+
+##### [목차로 이동](#목차)
+
+#### 오토와이어링되는 빈의 애너테이션
+한편 오토와이어링은 스프링이 빈의 요구 사항과 매칭되는 애플리케이션 컨텍스트상에서 다른 빈을 찾아 빈 간의 의존성을 자동으로 만족시키도록 하는 수단이다. 오토와이어링 수행을 하도록 지정하기 위해서는 스프링의 @Autowired 애너테이션[1]을 사용한다.
+
+
+
+- - -
+* [1]
+	* [생성자 주입을 필드 주입보다 권장하는 이유](https://madplay.github.io/post/why-constructor-injection-is-better-than-field-injection)
 
 ##### [목차로 이동](#목차)
 
