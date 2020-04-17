@@ -111,9 +111,9 @@ public class KnightMain {
 ##### [목차로 이동](#목차)
 
 #### 애스펙트와 공통 규약을 통한 선언적 프로그래밍
-시스템은 보통 특정한 기능을 책임지는 여러 개의 컴포넌트로 구성된다. 그러나 각 컴포넌트는 대체로 본연의 특정한 기능 외에 로깅(logging)이나 트랜잭션 관리, 보안 등의 시스템 서비스도 수행해야 하는 경우가 많다. 이러한 시스템 서비스는 시스템의 여러 컴포넌트에 관련되는 경향이 있으므로 횡단 관심사(cross-cutting concerns)라고 한다. AOP는 이러한 시스템 서비스를 모듈화해서 컴포넌트에 *선언적*으로 적용한다.
+시스템은 보통 특정한 기능을 책임지는 여러 개의 컴포넌트로 구성된다. 그러나 각 컴포넌트는 대체로 본연의 특정한 기능 외에 로깅(logging)이나 트랜잭션 관리, 보안 등의 시스템 서비스도 수행해야 하는 경우가 많다. 이러한 시스템 서비스는 시스템의 여러 컴포넌트에 관련되는 경향이 있으므로 횡단 관심사(cross-cutting concerns)라고 한다. AOP는 이러한 시스템 서비스를 모듈화해서 컴포넌트에 *선언적*[5]으로 적용한다.
 
-다시 말해 AOP를 이용하면 시스템 서비스에 대해서는 전혀 알지 못하지만, 응집도가 높고 본연의 관심사에 집중하는 컴포넌트를 만든다. 즉 애스펙트는 POJO를 단순화한다. 핵심 기능을 구현하는 모듈에는 아무런 변화도 가하지 않고 추가적인 기능을 *선언적*으로 적용하기 때문이다. 아래와 같은 로깅 시스템을 가정해보자.
+다시 말해 AOP[6]를 이용하면 시스템 서비스에 대해서는 전혀 알지 못하지만, 응집도가 높고 본연의 관심사에 집중하는 컴포넌트를 만든다. 즉 애스펙트는 POJO를 단순화한다. 핵심 기능을 구현하는 모듈에는 아무런 변화도 가하지 않고 추가적인 기능을 *선언적*으로 적용하기 때문이다. 아래와 같은 로깅 시스템을 가정해보자.
 
 콛.
 
@@ -132,12 +132,36 @@ public class KnightMain {
 	* 비침투적 개발이란 바탕이 되는 기술을 사용하는 클래스, 인터페이스, API 등을 코드에 직접 나타내지 않는 방법이다. 복잡함을 분리할 수 있다.
 * [4]
 	* 여기서는 Quest 인터페이스의 모의 구현체를 만들기 위해 Mockito로 알려진 모의 객체 프레임워크를 사용
+	* 레퍼런스
+		1. [Spring Boot - Unit Testing and Mocking with Mockito and JUnit](https://www.springboottutorial.com/spring-boot-unit-testing-and-mocking-with-mockito-and-junit)
+		2.
+* [5]
+* [6]
+	* 레퍼런스
+		1. [Implementing AOP with Spring Boot and AspectJ](https://www.springboottutorial.com/spring-boot-and-aop-with-spring-boot-starter-aop)
+		2. [AOP with Spring Boot](https://howtodoinjava.com/spring-boot2/aop-aspectj/)
+		3. [Spring AOP로 모든 Request 로그 남기기](https://shortstories.gitbook.io/studybook/spring_ad00_b828_c815_b9ac/aop/baa8-b4e0-c6f9-c694-ccad-c5d0-b300-d574-c11c-b85c-adf8-b85c-b0a8-ae30-ae30)
 
 
 ##### [목차로 이동](#목차)
 
 ### 빈을 담는 그릇으로의 컨테이너
+스프링 기반 애플리케이션에ㅐ서는 스프링 컨테이너(container) 안에서 객체가 태어나고, 자라고, 소멸한다. 스프링 컨테이너는 종속객체 주입을 이용해 애플리케이션을 구성하는 컴포넌트를 관리하며, 협력 컴포넌트 간 연관관계의 형성도 여기에서 이루어진다. 이러한 짐을 컨테이너에 덜어버린 객체들은 더 명확하고, 이해하기 쉬우며, 재사용을 촉진하고, 단위 테스트가 용이해진다.
 
+스프링에는 여러 컨테이너 구현체가 존재하며 이들은 크게 두 가지로 분류된다.
+
+1. 빈 팩토리
+	* org.springframework.beans.factory.BeanFactory 인터페이스에 의해 정의
+2. 애플리케이션 컨텍스트
+	* org.springframework.context.ApplicationContext 인터페이스에 의해 정의
+
+일반적으로는 빈 팩토리보다는 애플리케이션 컨텍스트를 더 선호한다. 애플리케이션 컨텍스트에는 다양한 종류가 있다.
+
+1. AnnotationConfigApplicationContext
+2. AnnotationConfigWebApplicationContext
+3. ClassPathXmlApplicationContext
+4. FileSystemXmlApplicationContext
+5. XmlWebApplicationContext
 
 ##### [목차로 이동](#목차)
 
@@ -157,7 +181,8 @@ public class KnightMain {
 ##### [목차로 이동](#목차)
 
 ## 참고
-
+* [JUnit 시리즈](https://velog.io/@minholee_93/series/JUnit)
+* [Servlet Container? DI Container? Bean? POJO?](https://jojoldu.tistory.com/28)
 
 
 ##### [목차로 이동](#목차)
