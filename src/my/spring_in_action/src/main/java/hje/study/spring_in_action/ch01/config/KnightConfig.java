@@ -6,8 +6,10 @@ import hje.study.spring_in_action.ch01.quest.Quest;
 import hje.study.spring_in_action.ch01.quest.SlayDragonQuest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
+@Import(MinstrelConfig.class)
 public class KnightConfig {
     @Bean
     public Knight knight() {
