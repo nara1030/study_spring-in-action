@@ -154,14 +154,22 @@ public class CDPlayerConfig {
 ```
 
 - - -
-* [1]
+* [1]: 베이스 패키지를 명시적으로 설정하는 두 가지 방법
+	1. basePackages
+		* 베이스 패키지 설정이 String 값으로 표시되어 타입 세이프하지 않음  
+		(패키지 이름 변경 시 에러 가능성)
+	2. basePackageClasses
+		* String 이름을 사용하여 패키지를 지정하는 대신, 클래스 배열로 지정  
+		(패키지 내의 클래스나 인터페이스 사용 가능, ~~즉 컴파일러 체크 가능?~~)
+		* 컴포넌트 클래스보다는 스캔될 패키지 안의 비어 있는 *마커 인터페이스* 생성 고려  
+		(마커 인터페이스를 사용하면 리팩토링이 쉽도록 인터페이스에 대한 레퍼런스만 가지게 되고, ~~컴포넌트 스캔하고자 했던 클래스의 밖으로 옮겨질 수 있는~~ 실제 애플리케이션 코드에 대한 레퍼런스를 미사용 가능)
 
 ##### [목차로 이동](#목차)
 
 #### 오토와이어링되는 빈의 애너테이션
 한편 오토와이어링은 스프링이 빈의 요구 사항과 매칭되는 애플리케이션 컨텍스트상에서 다른 빈을 찾아 빈 간의 의존성을 자동으로 만족시키도록 하는 수단이다. 오토와이어링 수행을 하도록 지정하기 위해서는 스프링의 @Autowired 애너테이션[1]을 사용한다.
 
-
+@Autowired 애너테이션의 사용은 생성자로 한정되지 않는다. 생성자나 세터 메소드를 포함한 어떤 메소드이든 스프링은 *메소드 파라미터에 의존성*[2]을 가진다. 한 개의 빈이 일치하면 그 빈은 와이어링되지만, 매칭되는 빈이 없다면 스프링은 애플리케이션 컨텍스트가 생성될 때 예외를 발생시킨다. 
 
 - - -
 * [1]
@@ -195,6 +203,11 @@ public class CDPlayerConfig {
 ##### [목차로 이동](#목차)
 
 ## 참고
-
+* 마커 인터페이스
+	1. [What is Marker interfaces in Java and why required?](https://javarevisited.blogspot.com/2012/01/what-is-marker-interfaces-in-java-and.html)
+	2. [Marker interfaces in Java - Baeldung](https://www.baeldung.com/java-marker-interfaces)
+	3. [Marker interfaces in Java - GeeksforGeeks](https://www.geeksforgeeks.org/marker-interface-java/)
+	4. [Java Marker Interface - javapaper](https://javapapers.com/core-java/abstract-and-interface-core-java-2/what-is-a-java-marker-interface/)
+	5. [마커 인터페이스](https://woovictory.github.io/2019/01/04/Java-What-is-Marker-interface/)
 
 ##### [목차로 이동](#목차)
