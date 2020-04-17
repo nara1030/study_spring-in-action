@@ -166,7 +166,12 @@ public class CDPlayerConfig {
 - - -
 * [1]
 	* [생성자 주입을 필드 주입보다 권장하는 이유](https://madplay.github.io/post/why-constructor-injection-is-better-than-field-injection)
-
+		1. 순환 참조 방지
+		2. 테스트 코드 작성 용이
+		3. 나쁜 냄새 제거
+		4. Immutable
+* [2]
+	
 ##### [목차로 이동](#목차)
 
 ### 자바로 빈 와이어링하기

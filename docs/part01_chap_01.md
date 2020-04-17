@@ -115,7 +115,47 @@ public class KnightMain {
 
 다시 말해 AOP[6]를 이용하면 시스템 서비스에 대해서는 전혀 알지 못하지만, 응집도가 높고 본연의 관심사에 집중하는 컴포넌트를 만든다. 즉 애스펙트는 POJO를 단순화한다. 핵심 기능을 구현하는 모듈에는 아무런 변화도 가하지 않고 추가적인 기능을 *선언적*으로 적용하기 때문이다. 아래와 같은 로깅 시스템을 가정해보자.
 
-콛.
+```java
+@Aspect
+public class Minstrel {
+    private PrintStream stream;
+
+    public Minstrel(PrintStream stream) {
+        this.stream = stream;
+    }
+
+    @Pointcut("execution(* *.embarkOnQuest(..))")
+    public void onPointCut() {
+    }
+
+    @Before("onPointCut()")
+    public void singBeforeQuest() {
+        stream.println("Fa la la, the knight is so brave!");
+    }
+
+    @After("onPointCut()")
+    public void singAfterQuest() {
+        stream.println("Tee hee hee, the brave knight " + "did embark  on a quest");
+    }
+}
+```
+
+@Aspect 애너테이션은 Minstrel이 더 이상 POJO가 아닌 애스펙트임을 나타낸다. 한편 Minstrel에서 embark() 메소드는 @Pointcut으로 애너테이션되는데, embark() 메소드의 몸체는 별 볼 일 없으며 실제로는 비어있다. 즉 메소드 자체는 마커(marker)[7]이고, @Pointcut 애너테이션을 제공한다. 애너테이션과 embark() 메소드와는 별도로 Minstrel 클래스는 POJO이므로 다른 자바 클래스처럼 스프링에서 빈으로 와이어링된다.
+
+```java
+@Configuration
+@EnableAspectJAutoProxy
+public class MinstrelConfig {
+    @Bean(name = "minstrel")
+    public Minstrel minstrel() {
+        return new Minstrel(System.out);
+    }
+}
+```
+
+단, Minstrel이 평범한 스프링 컨테이너 내의 빈과는 다르므로 별도의 설정을 해주어야 한다. 비록 Minstrel에서 AspectJ 애너테이션을 사용하더라도 애스펙트로 변경하는 프록시[8]를 생성하고, 애너테이션을 해석하는 무엇인가 없이는 애스펙트로 취급되지 않는다. 위 코드에서와 같이 JavaConfig를 사용한다면 설정 클래스의 클래스 레벨에서 @EnableAspectJAutoProxy 애너테이션을 적용하여 오토-프록싱(auto-proxing)을 사용한다. 실행 결과는 아래와 같다.
+
+<img src="../img/part_01_img_01.png" width="800" height="250"></br>
 
 ##### [목차로 이동](#목차)
 
@@ -141,7 +181,8 @@ public class KnightMain {
 		1. [Implementing AOP with Spring Boot and AspectJ](https://www.springboottutorial.com/spring-boot-and-aop-with-spring-boot-starter-aop)
 		2. [AOP with Spring Boot](https://howtodoinjava.com/spring-boot2/aop-aspectj/)
 		3. [Spring AOP로 모든 Request 로그 남기기](https://shortstories.gitbook.io/studybook/spring_ad00_b828_c815_b9ac/aop/baa8-b4e0-c6f9-c694-ccad-c5d0-b300-d574-c11c-b85c-adf8-b85c-b0a8-ae30-ae30)
-
+* [7]
+* [8]
 
 ##### [목차로 이동](#목차)
 
