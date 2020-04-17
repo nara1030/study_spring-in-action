@@ -16,15 +16,15 @@ public class Minstrel {
     }
 
     @Pointcut("execution(* *.embarkOnQuest(..))")
-    public void onPointCut() {
+    public void embark() {
     }
 
-    @Before("onPointCut()")
+    @Before("embark()")
     public void singBeforeQuest() {
         stream.println("Fa la la, the knight is so brave!");
     }
 
-    @After("onPointCut()")
+    @After("embark()")
     public void singAfterQuest() {
         stream.println("Tee hee hee, the brave knight " + "did embark  on a quest");
     }
