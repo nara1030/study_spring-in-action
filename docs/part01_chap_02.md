@@ -129,6 +129,7 @@ public class CDPlayerConfig {
 
 이 경우 config를 분리할 수 있기 때문에 패키지 구조를 아래와 같이 구성할 수 있다.
 
+```txt
 └── src
     ├── main
     │   ├── java
