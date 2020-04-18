@@ -183,7 +183,56 @@ public class CDPlayerConfig {
 ##### [목차로 이동](#목차)
 
 ### 자바로 빈 와이어링하기
+대부분 컴포넌트 스캐닝과 오토 와이어링을 사용한 자동 스프링 설정을 선호하지만 스프링을 명시적으로 설정해야 하는 경우가 있다. 예를 들어 타사 라이브러리의 컴포넌트를 애플리케이션으로 와이어하고자 한다면 그 라이브러리의 소스 코드를 가지고 있지 않으므로 클래스를 @Component와 @Autowired를 사용하여 애너테이트할 수 없다. 이 경우 XML 혹은 JavaConfig를 통한 명시적 설정을 해야 하는데, 이 절에서는 JavaConfig 사용법에 대해 살펴본다. 먼저 특징은 다음과 같다.
 
+1. JavaConfig는 타입 세이프하며 리팩토링 친화적으로 명시적 설정을 위해 선호하는 옵션
+2. 다른 자바 코드와는 다른 설정용 코드로 어떠한 비즈니스 로직도 미포함, 미영향  
+(필수 사항은 아니나 JavaConfig는 애플리케이션 로직 중 비즈니스 로직 외의 다른 부분과는 분리된 패키지)
+
+이미 만들었던 CDPlayerConfig를 통해 JavaConfig를 살펴보자.
+
+```java
+@Configuration
+public class CDPlayerConfig {
+}
+```
+
+JavaConfig 클래스 만들기의 핵심은 @Configuration으로 애너테이트하는 것이다. @Configuration 애너테이션은 이를 설정 클래스로서 식별하고, 스프링 애플리케이션 컨텍스트에서 만들어진 빈의 자세한 내용이 포함될 수 있다는 것을 나타낸다.
+
+한편 이 절에서는 명시적인 설정에 집중하기 위해 @ComponentScan 애너테이션을 제거하였다(컴포넌트 스캐닝과 명시적인 설정을 사용할 수 없는 이유가 있는 것은 아님). 즉 @ComponentScan이 제거되었으므로 CDPlayerConfig 클래스는 별 효과가 없다. 만약 CDPlayerTest를 실행한다면 BeanCreaionException이 발생하며, 테스트는 실패한다. 그렇다면 어떻게 다시 테스트를 성공시킬 수 있을까?
+
+JavaConfig에서 빈을 선언하기 위해서 원하는 타입의 인스턴스를 만드는 메소드를 만들고, @Bean으로 애너테이트[1]한다.
+
+```java
+@Bean
+public CompactDisc sgtPeppers() {
+	return new SgtPeppers();
+}
+```
+
+선언된 CompactDisc 빈은 간단하며 의존성을 가지지 않는다. 하지만 CompactDisc에 의존성을 가진 CDPlayer 빈을 선언해야 한다. JavaConfig에서 어떻게 와이어링할까?
+
+```java
+@Bean
+public CDPlayer cdPlayer() {
+	return new CDPlayer(sgtPeppers());
+}
+```
+
+cdPlayer() 메소드의 몸체는 sgtPeppers() 메소드 몸체와 미묘하게 다르다. 구체적으로 CompactDisc는 sgtPeppers를 호출해서 생성되는 것처럼 보이지만, 항상 그렇진 않다. sgtPeppers() 메소드는 @Bean으로 애너테이트되므로 스프링은 콜을 중간에 인터셉트하고, 메소드에 의해 만들어진 빈은 다시 만들어지지 않고 이미 만들어진 것을 리턴해주는 것을 보장한다. 만약 sgtPeppers()에 대한 호출이 일반 자바 메소드의 호출처럼 처리된다면 각 CDPlayer에는 각각의 SgtPeppers의 인스턴스가 주어질 것이다. 반면 기본적으로 스프링의 모든 빈은 싱글톤(singletons)이고, 중복 인스턴스를 생성할 필요가 없다. 다만 메소드를 호출하여 빈을 참조하는 방법은 혼동의 여지가 있으므로 아래와 같은 방법을 사용할 수 있다.
+
+```java
+@Bean
+public CDPlayer cdPlayer(CompactDisc compactDisc) {
+	return new CDPlayer(compactDisc);
+}
+```
+
+- - -
+* [1]
+	* @Bean 애너테이션은 이 메소드가 스프링 애플리케이션 컨텍스트에서 빈으로 등록된 객체를 반환해야 함을 의미
+	* 기본적으로 빈은 @Bean으로 애너테이트된 메소드와 동일한 ID를 받음  
+	(다른 ID 갖고자 한다면 name 애트리뷰트 사용)
 
 ##### [목차로 이동](#목차)
 
