@@ -178,7 +178,13 @@ public class CDPlayerConfig {
 		2. 테스트 코드 작성 용이
 		3. 나쁜 냄새 제거
 		4. Immutable
-* [2]
+* [2]  
+	```java
+	@Bean
+	public CDPlayer cdPlayer(CompactDisc compactDisc) {
+		return new CDPlayer(compactDisc);
+	}
+	```
 	
 ##### [목차로 이동](#목차)
 
@@ -227,6 +233,8 @@ public CDPlayer cdPlayer(CompactDisc compactDisc) {
 	return new CDPlayer(compactDisc);
 }
 ```
+
+cdPlayer() 메소드는 파라미터로 CompactDisc를 사용한다(→ 스프링은 메소드 파라미터에 의존성 가짐). 스프링이 CDPlayer 빈을 만들기 위해 cdPlayer()를 호출하였을 때, CompactDisc를 설정 메소드로 오토와이어링한다. 즉 cdPlayer() 메소드는 CompactDisc의 @Bean 메소드를 명시적으로 참조하지 않고서도, CompactDisc를 CDPlayer 생성자에 주입한다.
 
 - - -
 * [1]
